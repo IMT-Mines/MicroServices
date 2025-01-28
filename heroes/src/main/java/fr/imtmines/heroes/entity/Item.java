@@ -7,10 +7,14 @@ import jakarta.persistence.*;
 public class Item {
 
     @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "hero")
+    @JoinColumn(name = "hero", nullable = false)
     private Hero hero;
 
     public String getName() {
@@ -26,8 +30,7 @@ public class Item {
         return hero;
     }
 
-    public Item setHero(Hero hero) {
+    public void setHero(Hero hero) {
         this.hero = hero;
-        return this;
     }
 }

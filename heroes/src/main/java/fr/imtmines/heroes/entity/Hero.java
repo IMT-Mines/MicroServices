@@ -36,7 +36,7 @@ public class Hero {
     @Column
     long roomId;
 
-    @OneToMany(mappedBy = "hero")
+    @OneToMany(mappedBy = "hero", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items;
 
     public Long getId() {
@@ -116,6 +116,9 @@ public class Hero {
     }
 
     public void setItems(List<Item> items) {
-        this.items = items;
+        this.items.clear();
+        items.forEach(item -> item.setHero(this));
+        this.items.addAll(items);
     }
+
 }

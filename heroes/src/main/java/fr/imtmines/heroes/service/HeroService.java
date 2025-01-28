@@ -4,11 +4,13 @@ import fr.imtmines.heroes.entity.Hero;
 import fr.imtmines.heroes.entity.Item;
 import fr.imtmines.heroes.entity.Items;
 import fr.imtmines.heroes.repository.HeroRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class HeroService {
 
