@@ -15,20 +15,26 @@ public class Hero {
     @Column(nullable = false)
     private String name;
 
-    @Column
-    private int level;
+    @Column(nullable = false)
+    private int level = 0;
 
-    @Column
-    private int gold;
+    @Column(nullable = false)
+    private int gold = 0;
 
-    @Column
+    @Column(nullable = false)
     private int maxHealth;
 
-    @Column
+    @Column(nullable = false)
     private int health;
 
-    @Column
+    @Column(nullable = false)
     private int damage;
+
+    @Column
+    long dungeonId;
+
+    @Column
+    long roomId;
 
     @OneToMany(mappedBy = "hero")
     private List<Item> items;
@@ -37,71 +43,79 @@ public class Hero {
         return id;
     }
 
-    public Hero setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public Hero setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public Hero setLevel(int level) {
+    public void setLevel(int level) {
         this.level = level;
-        return this;
     }
 
     public int getGold() {
         return gold;
     }
 
-    public Hero setGold(int gold) {
+    public void setGold(int gold) {
         this.gold = gold;
-        return this;
     }
 
     public int getMaxHealth() {
         return maxHealth;
     }
 
-    public Hero setMaxHealth(int maxHealth) {
+    public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
-        return this;
     }
 
     public int getHealth() {
         return health;
     }
 
-    public Hero setHealth(int health) {
+    public void setHealth(int health) {
         this.health = health;
-        return this;
     }
 
     public int getDamage() {
         return damage;
     }
 
-    public Hero setDamage(int damage) {
+    public void setDamage(int damage) {
         this.damage = damage;
-        return this;
+    }
+
+    public long getDungeonId() {
+        return dungeonId;
+    }
+
+    public void setDungeonId(long dungeonId) {
+        this.dungeonId = dungeonId;
+    }
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
     }
 
     public List<Item> getItems() {
         return items;
     }
 
-    public Hero setItems(List<Item> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
-        return this;
     }
 }
