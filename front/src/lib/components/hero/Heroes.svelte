@@ -4,11 +4,11 @@
 </script>
 
 <div class="hero-container">
-    <div class="hero-selection">
-       <HeroesList></HeroesList>
+    <div class="box">
+        <HeroesList></HeroesList>
     </div>
 
-    <div class="hero-creation">
+    <div class=" box">
         <HeroCreation></HeroCreation>
     </div>
 </div>
@@ -20,19 +20,15 @@
         width: 100%;
     }
 
-    .hero-selection {
-        width: 50%;
+    .box {
+        background-color: #1c1c1c;
+        border-radius: 10px;
+        margin: 20px;
         display: flex;
         flex-direction: column;
         gap: 10px;
         padding: 20px;
+        width: 600px;
     }
 
-    .hero-creation {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-    }
 </style>

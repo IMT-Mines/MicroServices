@@ -1,7 +1,5 @@
 <script lang="ts">
-
-    import type {Hero} from "../../models/hero.model";
-    import {stubHeroes} from "../../stub/stub-heroes";
+    import type { Hero } from "../../models/hero.model";
 
     let newHero: Partial<Hero> = {
         name: "",
@@ -19,7 +17,6 @@
         }
 
         const createdHero: Hero = {
-            id: 0,
             name: newHero.name,
             level: newHero.level,
             gold: newHero.gold || 0,
@@ -29,9 +26,16 @@
             inventory: newHero.inventory || []
         };
 
-        //stubHeroes.push(createdHero); // TODO STUB
+        await fetch('http://localhost:8080/api/heroes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(createdHero)
+        });
+    }
 
-         await fetch('http://localhost:8080/heroes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(createdHero) });
+    function handleInventoryChange(e: Event) {
+        const target = e.target as HTMLInputElement;
+        newHero.inventory = target?.value.split(",").map((item: string) => item.trim());
     }
 </script>
 
@@ -60,13 +64,11 @@
     <div>
         <label for="inventory">Inventaire</label>
         <input
-                id="inventory"
-                type="text"
-                bind:value={newHero.inventory}
-                placeholder="Objets séparés par des virgules"
-                on:change={(e) => {
-                        newHero.inventory = e.target.value.split(",").map(item => item.trim());
-                    }}
+            id="inventory"
+            type="text"
+            bind:value={newHero.inventory}
+            placeholder="Objets séparés par des virgules"
+            on:change={handleInventoryChange}
         />
     </div>
     <button type="submit">Ajouter un héros</button>

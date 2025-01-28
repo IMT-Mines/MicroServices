@@ -1,10 +1,15 @@
 <script lang="ts">
-    import type { Hero } from "../../models/hero.model";
+    import type {Hero} from "../../models/hero.model";
+    import {gameState} from "../../../stores/game-state.store";
 
     export let hero: Hero;
+
+    function selectHero() {
+        gameState.update(state => ({ ...state, hero }));
+    }
 </script>
 
-<div class="hero-item">
+<div class="hero-item" on:click={selectHero}>
     <div class="hero-image">
         <div class="avatar">{hero.name.charAt(0).toUpperCase()}</div>
     </div>

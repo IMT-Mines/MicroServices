@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Heroes from "./lib/components/hero/Heroes.svelte";
+    import Game from "./lib/components/Game.svelte";
 </script>
-
-<Heroes></Heroes>
+<Game></Game>
