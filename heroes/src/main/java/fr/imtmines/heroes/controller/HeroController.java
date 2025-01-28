@@ -26,7 +26,7 @@ public class HeroController {
     }
 
     @PostMapping("/heroes")
-    public ResponseEntity<String> addHero(Hero hero) {
+    public ResponseEntity<String> addHero(@RequestBody Hero hero) {
         hero.setId(null);
         heroService.createHero(hero);
         return ResponseEntity.ok().body("Hero created");
