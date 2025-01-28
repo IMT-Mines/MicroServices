@@ -8,13 +8,13 @@ import java.util.List;
 @Table(name="Dungeons")
 public class Dungeon {
     @Id
-    @Column(name="id")
+    @GeneratedValue
     private Long id;
 
     @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy = "dungeon")
+    @OneToMany(mappedBy = "dungeon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Room> rooms;
 
     public Long getId() {

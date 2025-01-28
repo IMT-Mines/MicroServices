@@ -13,7 +13,7 @@ public class CreateMonsterService {
 
     public void createMonsters(Object body) {
         webClient.post()
-            .uri("http://localhost:8080/api/monsters/dungeon")
+            .uri("http://localhost:8081/api/monsters/dungeon")
             .bodyValue(body)
             .retrieve()
             .bodyToMono(String.class)

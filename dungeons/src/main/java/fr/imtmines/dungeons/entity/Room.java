@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name="Room")
 public class Room {
     @Id
-    @Column(name = "id")
+    @GeneratedValue
     private Long id;
 
     @Column(name = "name")
@@ -16,6 +16,7 @@ public class Room {
     private String monsterId;
 
     @ManyToOne
+    @JoinColumn(name = "dungeon", nullable = false)
     private Dungeon dungeon;
 
     public Long getId() {
@@ -40,5 +41,13 @@ public class Room {
 
     public void setMonsterId(String monsterId) {
         this.monsterId = monsterId;
+    }
+
+    public Dungeon getDungeon() {
+        return dungeon;
+    }
+
+    public void setDungeon(Dungeon dungeon) {
+        this.dungeon = dungeon;
     }
 }
