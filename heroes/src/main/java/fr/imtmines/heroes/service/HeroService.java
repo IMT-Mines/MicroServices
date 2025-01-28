@@ -1,8 +1,6 @@
 package fr.imtmines.heroes.service;
 
 import fr.imtmines.heroes.entity.Hero;
-import fr.imtmines.heroes.entity.Item;
-import fr.imtmines.heroes.entity.Items;
 import fr.imtmines.heroes.repository.HeroRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -29,6 +27,7 @@ public class HeroService {
 
     public void createHero(Hero hero) {
         logService.log("Creating hero " + hero.getName() + " with " + hero.getDamage() + " damage");
+        hero.setId(null);
         heroRepository.save(hero);
     }
 
@@ -51,8 +50,7 @@ public class HeroService {
 
     public void updateHeroInventory(Hero hero, List<String> newInventory) {
         logService.log("Updating hero with id " + hero.getId() + "(" + hero.getName() + ") inventory to " + newInventory);
-        final List<Item> items = newInventory.stream().map(Items.ITEMS::get).toList();
-        hero.setItems(items);
+        hero.setInventory(newInventory);
         heroRepository.save(hero);
     }
 

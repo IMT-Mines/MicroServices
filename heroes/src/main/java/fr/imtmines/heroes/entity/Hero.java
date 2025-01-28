@@ -31,13 +31,15 @@ public class Hero {
     private int damage;
 
     @Column
-    long dungeonId;
+    private long dungeonId;
 
     @Column
-    long roomId;
+    private long roomId;
 
-    @OneToMany(mappedBy = "hero", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Item> items;
+    @ElementCollection
+    @CollectionTable(name = "HeroItems", joinColumns = @JoinColumn(name = "hero_id"))
+    @Column(name = "item")
+    private List<String> inventory;
 
     public Long getId() {
         return id;
@@ -111,14 +113,27 @@ public class Hero {
         this.roomId = roomId;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<String> getInventory() {
+        return inventory;
     }
 
-    public void setItems(List<Item> items) {
-        this.items.clear();
-        items.forEach(item -> item.setHero(this));
-        this.items.addAll(items);
+    public void setInventory(List<String> inventory) {
+        this.inventory = inventory;
     }
 
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", level=" + level +
+                ", gold=" + gold +
+                ", maxHealth=" + maxHealth +
+                ", health=" + health +
+                ", damage=" + damage +
+                ", dungeonId=" + dungeonId +
+                ", roomId=" + roomId +
+                ", items=" + inventory +
+                '}';
+    }
 }
