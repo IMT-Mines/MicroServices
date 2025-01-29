@@ -17,7 +17,7 @@ public class CreateMonsterService {
         this.webClient = webClient;
     }
 
-    public void createMonsters(MonsterDto monsterDto) {
+    public void createMonster(MonsterDto monsterDto) {
         webClient.post()
                 .uri(monsterApiUrl + "api/monsters/dungeon")
                 .bodyValue(monsterDto)

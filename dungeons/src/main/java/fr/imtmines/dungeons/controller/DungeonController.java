@@ -39,7 +39,7 @@ public class DungeonController {
     public ResponseEntity<Room> getDungeonRoomById(@PathVariable Long dungeonId, @PathVariable Long roomId, @RequestParam Long heroId) {
         return dungeonService.getRoomById(dungeonId, roomId)
                 .map(room -> {
-                    createMonsterService.createMonsters(new MonsterDto(dungeonId, roomId, room.getMonsterId(), heroId));
+                    createMonsterService.createMonster(new MonsterDto(dungeonId, roomId, room.getMonsterId(), heroId));
                     return ResponseEntity.ok(room);
                 })
                 .orElseThrow(() -> new DungeonNotFoundException("Room not found with id " + roomId + " in dungeon " + dungeonId));

@@ -1,0 +1,95 @@
+openapi: '3.0.3'
+info:
+  title: Dungeons API
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8082/api
+tags:
+  - name: heroes
+paths:
+  /dungeons:
+    get:
+      tags:
+        - heroes
+      responses:
+        '200':
+          description: OK
+  /dungeons/{id}:
+    get:
+      tags:
+        - heroes
+      parameters:
+        - name: id
+          in: path
+          description: ID of the dungeon
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Dungeon'
+        '404':
+          description: Not found
+  /dungeons/{dungeonId}/rooms/{roomId}:
+    get:
+      tags:
+        - heroes
+      parameters:
+        - name: dungeonId
+          in: path
+          description: ID of the dungeon
+          required: true
+          schema:
+            type: integer
+        - name: roomId
+          in: path
+          description: ID of the room
+          required: true
+          schema:
+            type: integer
+        - name: heroId
+          in: query
+          description: ID of the hero
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        '404':
+          description: Not found
+components:
+  schemas:
+    Dungeon:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'Donjon 1'
+        rooms:
+          type: array
+          items:
+              $ref: '#/components/schemas/Room'
+    Room:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: '1'
+        name:
+          type: string
+          example: 'Salle 1'
+        monsterId:
+          type: integer
+          example: '3'
