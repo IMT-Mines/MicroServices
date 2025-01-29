@@ -52,4 +52,8 @@ public class HeroService {
         heroRepository.save(hero);
     }
 
+    public void updateHeroLevel(Hero hero, Integer level) {
+        hero.setLevel(level);
+        heroRepository.save(hero);
+    }
 }

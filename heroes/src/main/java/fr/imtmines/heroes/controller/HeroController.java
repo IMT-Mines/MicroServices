@@ -72,6 +72,18 @@ public class HeroController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PutMapping("/{id}/level")
+    public ResponseEntity<String> updateHeroLevel(@PathVariable String id, @RequestBody Map<String, Integer> body) {
+        final Integer level = body.get("level");
+        if (level == null)
+            throw new MissingParameterException("level");
+        final Hero hero = heroService.getHero(Long.parseLong(id))
+                .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
+        heroService.updateHeroLevel(hero, level);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
     @PutMapping("/{id}/position")
     public ResponseEntity<String> updateHeroPosition(@PathVariable String id, @RequestBody Map<String, Long> body) {
         final Long newDungeonId = body.get("dungeonId");
