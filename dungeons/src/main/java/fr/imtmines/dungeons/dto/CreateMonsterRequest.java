@@ -3,10 +3,10 @@ package fr.imtmines.dungeons.dto;
 public class CreateMonsterRequest {
     private Long dungeonId;
     private Long roomId;
-    private String monsterId;
+    private Long monsterId;
     private Long heroId;
 
-    public CreateMonsterRequest(Long dungeonId, Long roomId, String monsterId, Long heroId) {
+    public CreateMonsterRequest(Long dungeonId, Long roomId, Long monsterId, Long heroId) {
         this.dungeonId = dungeonId;
         this.roomId = roomId;
         this.monsterId = monsterId;
@@ -29,11 +29,11 @@ public class CreateMonsterRequest {
         this.roomId = roomId;
     }
 
-    public String getMonsterId() {
+    public Long getMonsterId() {
         return monsterId;
     }
 
-    public void setMonsterId(String monsterId) {
+    public void setMonsterId(Long monsterId) {
         this.monsterId = monsterId;
     }
 

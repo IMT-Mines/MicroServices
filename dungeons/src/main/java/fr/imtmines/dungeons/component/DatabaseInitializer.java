@@ -3,38 +3,41 @@ package fr.imtmines.dungeons.component;
 import fr.imtmines.dungeons.entity.Dungeon;
 import fr.imtmines.dungeons.entity.Room;
 import fr.imtmines.dungeons.repository.DungeonRepository;
-import fr.imtmines.dungeons.repository.RoomRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class DatabaseInitializer {
     private final DungeonRepository dungeonRepository;
-    private final RoomRepository roomRepository;
 
-    public DatabaseInitializer(DungeonRepository dungeonRepository, RoomRepository roomRepository) {
+    private final int DUNGEONS = 5;
+    private final int ROOMS = 5;
+    private final int MONSTERS = 6;
+
+    public DatabaseInitializer(DungeonRepository dungeonRepository) {
         this.dungeonRepository = dungeonRepository;
-        this.roomRepository = roomRepository;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void initializeDatabase() {
-        for (int i = 0; i < 5; i++) {
+        Random random = new Random();
+
+        for (int i = 0; i < DUNGEONS; i++) {
             Dungeon dungeon = new Dungeon();
             dungeon.setName("Donjon " + i);
 
             List<Room> rooms = new ArrayList<>();
 
-            for (int j = 0; j < 5; j++) {
+            for (long j = 0; j < ROOMS; j++) {
                 Room room = new Room();
                 room.setName("Salle " + j);
-                room.setMonsterId("Monstre " + j);
+                room.setMonsterId((long) random.nextInt(MONSTERS));
                 room.setDungeon(dungeon);
-
                 rooms.add(room);
             }
 

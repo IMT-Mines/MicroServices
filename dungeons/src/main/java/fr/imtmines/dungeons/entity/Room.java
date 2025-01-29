@@ -1,5 +1,6 @@
 package fr.imtmines.dungeons.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,10 +14,11 @@ public class Room {
     private String name;
 
     @Column(name = "monsterId")
-    private String monsterId;
+    private Long monsterId;
 
     @ManyToOne
     @JoinColumn(name = "dungeon", nullable = false)
+    @JsonIgnore
     private Dungeon dungeon;
 
     public Long getId() {
@@ -35,11 +37,11 @@ public class Room {
         this.name = name;
     }
 
-    public String getMonsterId() {
+    public Long getMonsterId() {
         return monsterId;
     }
 
-    public void setMonsterId(String monsterId) {
+    public void setMonsterId(Long monsterId) {
         this.monsterId = monsterId;
     }
 
