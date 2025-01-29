@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MonstersInstanceRepository extends JpaRepository<MonsterInstance, Long> {
-    Optional<Object> findByUserId(String userId);
+    Optional<Object> findByHeroId(Long heroId);
 }

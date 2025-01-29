@@ -47,6 +47,7 @@ public class MonstersController {
         monsterInstance.setDamage(monsterTemplate.getDamage());
         monsterInstance.setHealth(monsterTemplate.getMaxHealth());
         monsterInstance.setName(monsterTemplate.getName());
+        monsterInstance.setImage(monsterTemplate.getImage());
 
         MonsterInstance createdMonsterInstance = monstersInstanceService.saveMonsterInstance(monsterInstance);
         return new ResponseEntity<>(createdMonsterInstance, HttpStatus.CREATED);

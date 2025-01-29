@@ -16,9 +16,17 @@ public class MonsterInstance {
     private int damage;
 
     private int health;
-    private String userId;
+    private Long heroId;
     private int roomId;
     private int dungeonId;
+    private String image;
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public String getImage() {
+        return image;
+    }
 
 
     public void setId(Long id) {
@@ -77,12 +85,12 @@ public class MonsterInstance {
         return damage;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setHeroId(Long userId) {
+        this.heroId = userId;
     }
 
-    public String getUserId() {
-        return userId;
+    public Long getHeroId() {
+        return heroId;
     }
 
     public void setRoomId(int roomId) {

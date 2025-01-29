@@ -14,6 +14,15 @@ public class Monster {
     private int gold;
     private String itemDrop;
     private int damage;
+    private String image;
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
 
     public void setId(Long id) {
         this.id = id;
