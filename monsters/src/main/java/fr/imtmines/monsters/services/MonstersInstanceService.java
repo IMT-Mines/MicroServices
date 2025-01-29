@@ -7,6 +7,8 @@ import fr.imtmines.monsters.repository.MonstersInstanceRepository;
 import fr.imtmines.monsters.repository.MonstersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MonstersInstanceService {
 
@@ -23,20 +25,20 @@ public class MonstersInstanceService {
         monstersInstanceRepository.deleteById(id);
     }
 
-    public MonsterInstance createMonsterInstance(MonsterInstance monsterInstance) {
+    public List<MonsterInstance> getMonstersInstance() {
+        return monstersInstanceRepository.findAll();
+    }
 
-        Monster monsterTemplate = monstersRepository.findByName(monsterInstance.getName())
-                .orElseThrow(() -> new IllegalArgumentException("No monster template found with the name: " + monsterInstance.getName()));
+    public MonsterInstance getMonstersInstanceById(Long id) {
+        return monstersInstanceRepository.findById(id).orElse(null);
+    }
 
-
-        monsterInstance.setMaxHealth(monsterTemplate.getMaxHealth());
-        monsterInstance.setGold(monsterTemplate.getGold());
-        monsterInstance.setItemDrop(monsterTemplate.getItemDrop());
-        monsterInstance.setDamage(monsterTemplate.getDamage());
-        monsterInstance.setHealth(monsterTemplate.getMaxHealth());
-
-
+    public MonsterInstance saveMonsterInstance(MonsterInstance monsterInstance) {
         return monstersInstanceRepository.save(monsterInstance);
+    }
+
+    public MonsterInstance getMonsterInstanceByUserId(Long userId) {
+        return (MonsterInstance) monstersInstanceRepository.findByUserId(String.valueOf(userId)).orElse(null);
     }
 
 }

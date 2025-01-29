@@ -15,18 +15,9 @@ public class MonstersService {
         this.monstersRepository = monstersRepository;
     }
 
-    public List<Monster> getMonsters() {
-        return monstersRepository.findAll();
-    }
-
     public Monster getMonstersById(Long id) {
         return monstersRepository.findById(id).orElse(null);
     }
-
-    public Monster createMonster(Monster monster) {
-        return monstersRepository.save(monster);
-    }
-
 
 }
 
