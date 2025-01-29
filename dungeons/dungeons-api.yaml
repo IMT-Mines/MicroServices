@@ -11,13 +11,23 @@ paths:
     get:
       tags:
         - heroes
+      summary: Get all dungeons
+      description: 'Gets all dungeons.'
       responses:
         '200':
           description: OK
+          content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Dungeon'
   /dungeons/{id}:
     get:
       tags:
         - heroes
+      summary: Get a dungeon
+      description: 'Gets dungeon by its id.'
       parameters:
         - name: id
           in: path
@@ -38,6 +48,8 @@ paths:
     get:
       tags:
         - heroes
+      summary: Get a room
+      description: 'Gets a room by its id in a dungeon by its id, the heroId query param is used to instantiate the monster of the room.'
       parameters:
         - name: dungeonId
           in: path
