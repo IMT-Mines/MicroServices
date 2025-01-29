@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/monsters")
@@ -30,8 +31,9 @@ public class MonstersController {
     }
 
     @GetMapping("/{id}")
-    public MonsterInstance getMonstersInstanceById(@PathVariable Long id) {
-        return monstersInstanceService.getMonstersInstanceById(id);
+    public Monster getMonsterById(@PathVariable Long id) {
+//        return monstersInstanceService.getMonstersInstanceById(id);
+        return monstersService.getMonstersById(id);
     }
 
     @PostMapping("/dungeon")
@@ -53,15 +55,10 @@ public class MonstersController {
 
     }
 
-    @GetMapping("/template/{id}")
-    public Monster getMonstersById(@PathVariable Long id) {
-        return monstersService.getMonstersById(id);
-    }
-
     @PutMapping("/attack")
     public ResponseEntity<Map<String, Integer>> attackMonster(@RequestBody Map<String, Long> requestBody) {
 
-        Long userId = requestBody.get("hero_id");
+        Long userId = requestBody.get("heroId");
         MonsterInstance monsterInstance = monstersInstanceService.getMonsterInstanceByUserId(userId);
 
         if (monsterInstance == null) {
@@ -72,14 +69,17 @@ public class MonstersController {
 
         if (monsterInstance.getHealth() <= 0) {
 
-            Integer health = monsterInstance.getHealth();
-            Integer damage = monsterInstance.getDamage();
+            int health = monsterInstance.getHealth();
+            int damage = monsterInstance.getDamage();
+
+            Random random = new Random();
+            Integer randomDamage = damage / 2 + random.nextInt(damage / 2 + 1);
 
             monstersInstanceService.deleteMonsterInstance(monsterInstance.getId());
 
             Map<String, Integer> response = new HashMap<>();
             response.put("health", health);
-            response.put("damage", damage);
+            response.put("damage", randomDamage);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
