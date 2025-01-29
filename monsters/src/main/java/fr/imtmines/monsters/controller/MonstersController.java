@@ -62,7 +62,7 @@ public class MonstersController {
     @PutMapping("/attack")
     public ResponseEntity<Map<String, Integer>> attackMonster(@RequestBody Map<String, Long> requestBody) {
 
-        Long userId = requestBody.get("userId");
+        Long userId = requestBody.get("hero_id");
         MonsterInstance monsterInstance = monstersInstanceService.getMonsterInstanceByUserId(userId);
 
         if (monsterInstance == null) {
