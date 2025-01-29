@@ -41,7 +41,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Hero'
+                $ref: '#/components/schemas/Hero'
         '404':
           description: Not found
   /heroes/{id}/gold:
