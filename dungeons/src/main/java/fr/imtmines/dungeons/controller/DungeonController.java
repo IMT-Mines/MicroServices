@@ -1,11 +1,11 @@
 package fr.imtmines.dungeons.controller;
 
-import fr.imtmines.dungeons.dto.CreateMonsterRequest;
+import fr.imtmines.dungeons.dto.MonsterDto;
 import fr.imtmines.dungeons.entity.Dungeon;
 import fr.imtmines.dungeons.entity.Room;
-import fr.imtmines.dungeons.repository.DungeonRepository;
-import fr.imtmines.dungeons.repository.RoomRepository;
+import fr.imtmines.dungeons.excepetion.DungeonNotFoundException;
 import fr.imtmines.dungeons.service.CreateMonsterService;
+import fr.imtmines.dungeons.service.DungeonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,42 +15,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class DungeonController {
-    private final DungeonRepository dungeonRepository;
-    private final RoomRepository roomRepository;
-
+    private final DungeonService dungeonService;
     private final CreateMonsterService createMonsterService;
 
-    public DungeonController(DungeonRepository dungeonRepository, RoomRepository roomRepository, CreateMonsterService createMonsterService) {
-        this.dungeonRepository = dungeonRepository;
-        this.roomRepository = roomRepository;
-
+    public DungeonController(DungeonService dungeonService, CreateMonsterService createMonsterService) {
+        this.dungeonService = dungeonService;
         this.createMonsterService = createMonsterService;
     }
 
     @GetMapping("/dungeons")
     public List<Dungeon> getDungeons() {
-        return dungeonRepository.findAll();
+        return dungeonService.getAllDungeons();
     }
 
     @GetMapping("/dungeons/{id}")
     public ResponseEntity<Dungeon> getDungeonsById(@PathVariable Long id) {
-        Dungeon dungeon = dungeonRepository.findById(id).orElse(null);
-
-        if (dungeon == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(dungeon);
+        return dungeonService.getDungeonById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new DungeonNotFoundException("Dungeon not found with id " + id));
     }
 
     @GetMapping("/dungeons/{dungeonId}/rooms/{roomId}")
     public ResponseEntity<Room> getDungeonRoomById(@PathVariable Long dungeonId, @PathVariable Long roomId, @RequestParam Long heroId) {
-        Room room = roomRepository.findRoomByIdAndDungeonId(roomId, dungeonId);
-
-        if (room == null)
-            return ResponseEntity.notFound().build();
-
-        createMonsterService.createMonsters(new CreateMonsterRequest(dungeonId, roomId, room.getMonsterId(), heroId));
-
-        return ResponseEntity.ok(room);
+        return dungeonService.getRoomById(dungeonId, roomId)
+                .map(room -> {
+                    createMonsterService.createMonsters(new MonsterDto(dungeonId, roomId, room.getMonsterId(), heroId));
+                    return ResponseEntity.ok(room);
+                })
+                .orElseThrow(() -> new DungeonNotFoundException("Room not found with id " + roomId + " in dungeon " + dungeonId));
     }
 }
