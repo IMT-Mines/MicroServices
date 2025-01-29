@@ -9,7 +9,7 @@ import java.util.List;
 public class Hero {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "increment")
     private Long id;
 
     @Column(nullable = false)
