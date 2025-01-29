@@ -25,7 +25,9 @@
             maxHealth: newHero.maxHealth,
             health: newHero.maxHealth,
             damage: newHero.damage,
-            inventory: newHero.inventory || []
+            inventory: newHero.inventory || [],
+            roomId: -1,
+            dungeonId: -1
         };
 
         await fetch(API_HERO, {

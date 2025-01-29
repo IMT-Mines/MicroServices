@@ -71,10 +71,16 @@
 
         if (currentHero.health <= 0) {
             alert("Vous avez perdu !");
-            setHealth(currentHero.id!, currentHero.maxHealth);
-            setPosition(currentHero.id!, undefined, undefined);
-            deleteMonster(currentHero.id!);
+            leftDonjon();
         }
+    }
+
+    function leftDonjon() {
+        if (!currentHero) return;
+
+        setHealth(currentHero.id!, currentHero.maxHealth);
+        setPosition(currentHero.id!, -1, -1);
+        deleteMonster(currentHero.id!);
     }
 
 </script>

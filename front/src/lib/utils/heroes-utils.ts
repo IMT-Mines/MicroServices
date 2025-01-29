@@ -14,7 +14,7 @@ export async function setHealth(heroId: number, health: number): Promise<boolean
 
 }
 
-export async function setPosition(heroId: number, dungeonId: number | undefined, roomId: number | undefined): Promise<boolean> {
+export async function setPosition(heroId: number, dungeonId: number, roomId: number): Promise<boolean> {
     const response = await fetch(`${API_HEROES}/${heroId}/position`,
         {
             method: 'PUT',

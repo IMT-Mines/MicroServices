@@ -15,7 +15,7 @@
         try {
             let dungeon: Dungeon | null = null;
 
-            if (hero.dungeonId && hero.roomId) {
+            if (hero.dungeonId != -1 && hero.roomId != -1) {
                 dungeon = await getHeroDungeon(hero);
             } else {
                 dungeon = await selectRandomDungeon();
