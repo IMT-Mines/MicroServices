@@ -12,7 +12,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/heroes")
 public class HeroController {
 
     private final HeroService heroService;
@@ -21,26 +21,26 @@ public class HeroController {
         this.heroService = heroService;
     }
 
-    @GetMapping("/heroes")
+    @GetMapping("/")
     public List<Hero> getHeroes() {
         return heroService.getHeroes();
     }
 
-    @PostMapping("/heroes")
+    @PostMapping("/")
     public ResponseEntity<String> addHero(@RequestBody Hero hero) {
         hero.setId(null);
         heroService.createHero(hero);
         return ResponseEntity.status(HttpStatus.CREATED).body("Hero created");
     }
 
-    @GetMapping("/hero/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Hero> getHero(@PathVariable String id) {
         return heroService.getHero(Long.parseLong(id))
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
     }
 
-    @PutMapping("/hero/{id}/gold")
+    @PutMapping("/{id}/gold")
     public ResponseEntity<String> updateHeroGold(@PathVariable String id, @RequestBody Map<String, Integer> body) {
         final Integer newGold = body.get("gold");
         if (newGold == null)
@@ -51,7 +51,7 @@ public class HeroController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/hero/{id}/health")
+    @PutMapping("/{id}/health")
     public ResponseEntity<String> updateHeroHealth(@PathVariable String id, @RequestBody Map<String, Integer> body) {
         final Integer newHealth = body.get("health");
         if (newHealth == null)
@@ -62,7 +62,7 @@ public class HeroController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/hero/{id}/inventory")
+    @PutMapping("/{id}/inventory")
     public ResponseEntity<String> updateHeroInventory(@PathVariable String id, @RequestBody Map<String, List<String>> body) {
         final List<String> newInventory = body.get("inventory");
         if (newInventory == null)
@@ -73,7 +73,7 @@ public class HeroController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @PutMapping("/hero/{id}/position")
+    @PutMapping("/{id}/position")
     public ResponseEntity<String> updateHeroPosition(@PathVariable String id, @RequestBody Map<String, Long> body) {
         final Long newDungeonId = body.get("dungeonId");
         final Long newRoomId = body.get("roomId");
