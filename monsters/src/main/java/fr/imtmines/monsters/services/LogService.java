@@ -1,6 +1,6 @@
-package fr.imtmines.dungeons.service;
+package fr.imtmines.monsters.services;
 
-import fr.imtmines.dungeons.entity.LogEntry;
+import fr.imtmines.monsters.entity.LogEntry;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Service
 public class LogService {
 
-    public static final String APP_NAME = "dungeon";
+    public static final String APP_NAME = "monster";
 
     private final AmqpTemplate amqpTemplate;
 
