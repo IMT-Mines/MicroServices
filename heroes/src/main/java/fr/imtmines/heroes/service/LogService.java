@@ -1,13 +1,16 @@
 package fr.imtmines.heroes.service;
 
+import fr.imtmines.heroes.entity.LogEntry;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class LogService {
 
-    public static final String APP_NAME = "heros";
+    public static final String APP_NAME = "heroes";
 
     private final AmqpTemplate amqpTemplate;
 
@@ -19,10 +22,9 @@ public class LogService {
     }
 
     public void log(String message) {
-        final String now = java.time.LocalDateTime.now().toString().replace("T", " ");
-        final String finalMessage = String.format("[%s] [%s] %s", now, APP_NAME, message);
-        System.out.println(finalMessage);
-        amqpTemplate.convertAndSend(logQueue, finalMessage);
+        final LogEntry logEntry = new LogEntry(UUID.randomUUID().toString(), System.currentTimeMillis(), APP_NAME, message);
+        amqpTemplate.convertAndSend(logQueue, logEntry);
+        System.out.println(logEntry);
     }
 
 }

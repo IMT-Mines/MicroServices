@@ -1,4 +1,4 @@
-package fr.imtmines.heroes.configuration;
+package fr.imtmines.logs.configuration;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
