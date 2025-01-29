@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name="Dungeons")
 public class Dungeon {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "increment")
     private Long id;
 
     @Column(name="name")

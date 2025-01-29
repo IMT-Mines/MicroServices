@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(name="Room")
 public class Room {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "increment")
     private Long id;
 
     @Column(name = "name")
