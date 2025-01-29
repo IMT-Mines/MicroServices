@@ -5,7 +5,7 @@
     export let hero: Hero;
 
     function selectHero() {
-        gameState.update(state => ({ ...state, hero }));
+        gameState.update(state => ({...state, hero}));
     }
 </script>
 
@@ -18,6 +18,8 @@
         <p><strong>Or :</strong> {hero.gold}</p>
         <p><strong>Niveau :</strong> {hero.level}</p>
         <p><strong>Dégâts :</strong> {hero.damage}</p>
+        <p><strong>Inventaire</strong> : <span title={hero.inventory.join(", ")}>{hero.inventory.length} items</span>
+        </p>
     </div>
 </div>
 

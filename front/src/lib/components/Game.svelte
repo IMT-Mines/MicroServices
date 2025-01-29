@@ -5,11 +5,12 @@
     import type { Dungeon } from "../models/dungeon.model.js";
     import Fight from "./Fight.svelte";
     import type { Hero } from "../models/hero.model";
-    import {setPosition} from "../utils/heroes-utils";
+    import {setHeroPosition} from "../utils/heroes-utils";
     import {getDungeons} from "../utils/dungeons-utils";
 
     async function startGame() {
         const hero = $gameState.hero;
+        console.log(hero);
         if (!hero) return;
 
         try {
@@ -29,7 +30,7 @@
             hero.roomId = dungeon.rooms[0]?.id;
             hero.dungeonId = dungeon.id;
 
-            const isUpdated = await setPosition(hero.id!, hero.roomId, hero.dungeonId);
+            const isUpdated = await setHeroPosition(hero.id!, hero.dungeonId, hero.roomId);
             if (!isUpdated) {
                 console.error("Échec de la mise à jour du donjon du héros.");
                 return;

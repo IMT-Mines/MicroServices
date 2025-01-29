@@ -7,26 +7,32 @@
     import LifeBox from "./LifeBox.svelte";
     import {attackMonster, deleteMonster, getMonster} from "../utils/monsters-utils";
     import {createMonsterFight} from "../utils/dungeons-utils";
-    import {setHealth, setPosition} from "../utils/heroes-utils";
+    import {setHeroGold, setHeroHealth, setHeroInventory, setHeroLevel, setHeroPosition} from "../utils/heroes-utils";
 
     let currentDungeon: Dungeon | null = $state(null);
     let currentHero: Hero | null = $state(null);
-    let monster: Monster | null = $state(null);
+    let currentMonster: Monster | null = $state(null);
 
     onMount(async () => {
         gameState.subscribe(state => {
             currentDungeon = state.dungeon;
             currentHero = state.hero;
-            monster = state.monster;
+            currentMonster = state.monster;
         });
         if (!currentDungeon || !currentHero) return null;
 
-        const response = await createMonsterFight(currentHero.dungeonId!, currentHero.roomId!, currentHero!.id!);
-        monster = await getMonster(currentHero!.id!);
-        if (!response || !monster) return;
-
-        gameState.update(state => ({...state, monster}));
+        await initRoomFight();
     });
+
+    async function initRoomFight() {
+        if (!currentHero || !currentDungeon) return;
+
+        const response = await createMonsterFight(currentHero.dungeonId!, currentHero.roomId!, currentHero!.id!);
+        currentMonster = await getMonster(currentHero!.id!);
+        if (!response || !currentMonster) return;
+
+        gameState.update(state => ({...state, monster: currentMonster}));
+    }
 
     function getRoom() {
         if (!currentDungeon || !currentHero) return null;
@@ -35,58 +41,118 @@
     }
 
     async function attack(isHealth = false) {
-        if (!currentHero || !monster) return;
-
+        if (!currentHero || !currentMonster) return;
         const damage = Math.floor(Math.random() * (currentHero?.damage / 2) + currentHero?.damage);
 
         const fightResult = await attackMonster(currentHero.id!, damage, isHealth);
         if (!fightResult) return;
 
         currentHero.health -= fightResult.damage;
-        monster.health = fightResult.health;
+        currentMonster.health = fightResult.health;
 
-        await setHealth(currentHero.id!, currentHero.health);
-
+        await updateHeroHealth(currentHero.health);
     }
 
-    function onAttack() {
-        attack();
-        checkLife();
+    async function onAttack() {
+        await attack();
+        await verifyFight();
     }
 
     async function onHeal() {
-        if (!currentHero || !monster) return;
+        if (!currentHero || !currentMonster) return;
 
         const randomHealthBonus = Math.floor(Math.random() * 10);
         const mappedHealthBonus = currentHero.health + randomHealthBonus > currentHero.maxHealth ? 0 : randomHealthBonus;
 
-        await setHealth(currentHero.id!, currentHero.health + mappedHealthBonus);
+        await updateHeroHealth(currentHero.health + mappedHealthBonus);
 
         await attack(true);
-        checkLife();
+        await verifyFight();
     }
 
-    function checkLife() {
-        if (!currentHero || !monster) return;
+    async function verifyFight() {
+        if (!currentHero || !currentMonster) return;
 
         if (currentHero.health <= 0) {
             alert("Vous avez perdu !");
-            leftDonjon();
+            await leftDonjon();
+        } else if (currentMonster.health <= 0) {
+            await deleteMonster(currentHero.id!);
+            console.log(currentDungeon);
+            const nextRoom = currentDungeon!.rooms.find(room => room.id === currentHero!.roomId! + 1);
+            if (!nextRoom) {
+                alert("Vous avez fini le donjon !");
+                await updateHeroLevel(currentHero.level + 1);
+                await updateHeroGold(currentMonster.gold + currentHero.gold);
+                currentHero.inventory.push(currentMonster.itemDrop)
+                await updateHeroInventory(currentHero.inventory);
+                await leftDonjon();
+                return;
+            } else {
+                alert("Vous avez gagné, vous passez à la salle suivante !");
+                await updateHeroGold(currentMonster.gold + currentHero.gold);
+                currentHero.inventory.push(currentMonster.itemDrop)
+                await updateHeroInventory(currentHero.inventory);
+                await updateHeroPosition(currentHero.dungeonId, nextRoom.id);
+                await initRoomFight();
+            }
         }
     }
 
-    function leftDonjon() {
+    async function updateHeroLevel(level: number) {
+        if (!currentHero) return;
+        const response = await setHeroLevel(currentHero.id!, level);
+        if (!response) return;
+        currentHero.level = level;
+        gameState.update(state => ({...state, hero: currentHero}));
+    }
+
+    async function updateHeroInventory(inventory: string[]) {
+        if (!currentHero) return;
+        const response = await setHeroInventory(currentHero.id!, inventory);
+        if (!response) return;
+        currentHero.inventory = inventory;
+        gameState.update(state => ({...state, hero: currentHero}));
+    }
+
+    async function updateHeroGold(gold: number) {
+        if (!currentHero) return;
+        const response = await setHeroGold(currentHero.id!, gold);
+        if (!response) return;
+        currentHero.gold = gold;
+        gameState.update(state => ({...state, hero: currentHero}));
+    }
+
+    async function updateHeroPosition(dungeonId: number, roomId: number) {
+        if (!currentHero) return;
+        const response = await setHeroPosition(currentHero.id!, dungeonId, roomId);
+        if (!response) return;
+        currentHero.dungeonId = dungeonId;
+        currentHero.roomId = roomId;
+        gameState.update(state => ({...state, hero: currentHero}));
+    }
+
+    async function updateHeroHealth(health: number) {
+        if (!currentHero) return;
+        const response = await setHeroHealth(currentHero.id!, health);
+        if (!response) return;
+        currentHero.health = health;
+        gameState.update(state => ({...state, hero: currentHero}));
+    }
+
+    async function leftDonjon() {
         if (!currentHero) return;
 
-        setHealth(currentHero.id!, currentHero.maxHealth);
-        setPosition(currentHero.id!, -1, -1);
-        deleteMonster(currentHero.id!);
+        await updateHeroHealth(currentHero.maxHealth);
+        await updateHeroPosition(-1, -1);
+        await deleteMonster(currentHero.id!);
+        gameState.update(state => ({...state, monster: null, dungeon: null}));
     }
 
 </script>
 
 <div class="fight">
-    {#if currentDungeon && currentHero && monster}
+    {#if currentDungeon && currentHero && currentMonster}
         <div class="dungeon-container">
             <div class="dungeon">
                 <h2>Donjon : {currentDungeon.name}</h2>
@@ -105,10 +171,11 @@
         <div class="monster">
             <img class="back monster-back" src="src/assets/back2.png" alt="back">
             <div class="lifebox-monster">
-                <LifeBox life="{monster.health ?? monster.maxHealth }" maxLife="{monster.maxHealth}"
-                         name="{monster.name}"></LifeBox>
+                <LifeBox life="{currentMonster.health ?? currentMonster.maxHealth }"
+                         maxLife="{currentMonster.maxHealth}"
+                         name="{currentMonster.name}"></LifeBox>
             </div>
-            <img class="monster-sprite" src={`src/assets/${monster.name}.png`} alt="monster">
+            <img class="monster-sprite" src={`src/assets/${currentMonster.name}.png`} alt="monster">
         </div>
 
         <div class="spell-box">
