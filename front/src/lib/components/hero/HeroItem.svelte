@@ -16,9 +16,8 @@
     <div class="hero-info">
         <h3>{hero.name}</h3>
         <p><strong>Or :</strong> {hero.gold}</p>
-        <p><strong>Santé :</strong> {hero.health} / {hero.maxHealth}</p>
-        <p><strong>Dégâts :</strong> {hero.damage}</p>
         <p><strong>Niveau :</strong> {hero.level}</p>
+        <p><strong>Dégâts :</strong> {hero.damage}</p>
     </div>
 </div>
 
@@ -26,8 +25,8 @@
     .hero-item {
         display: flex;
         align-items: center;
-        background-color: #222222;
-        border: 1px solid #ddd;
+        background-color: #ebe9c3;
+        border: 1px solid #000;
         border-radius: 8px;
         padding: 10px;
         gap: 15px;
@@ -37,7 +36,7 @@
     }
 
     .hero-item:hover {
-        background-color: #333333;
+        background-color: #dddcb9;
     }
 
     .hero-image {
@@ -64,16 +63,16 @@
     .hero-info h3 {
         margin: 0;
         font-size: 18px;
-        color: #ffffff;
+        color: #000000;
     }
 
     .hero-info p {
         margin: 0;
         font-size: 14px;
-        color: #d5d5d5;
+        color: #000000;
     }
 
     .hero-info p strong {
-        color: #ffffff;
+        color: #000000;
     }
 </style>

@@ -19,11 +19,6 @@
         <span class="player-name">{currentHero.name}</span>
 
         <div class="player-stats">
-            <div class="health-box">
-                <Fa icon="{faHeart}"></Fa>
-                <span>{currentHero.health} / {currentHero.maxHealth}</span>
-            </div>
-
             <div class="gold-box">
                 <Fa icon="{faDollarSign}"></Fa>
                 <span>{currentHero.gold}</span>
@@ -42,8 +37,8 @@
 <style>
     .navbar {
         height: 60px;
-        background-color: #1c1c1c;
-        color: #fff;
+        background-color: #ebe9c3;
+        color: #000;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -61,7 +56,7 @@
         gap: 10px;
     }
 
-    .xp-box, .gold-box, .health-box {
+    .xp-box, .gold-box {
         display: flex;
         align-items: center;
         gap: 5px;
@@ -76,9 +71,5 @@
 
     .gold-box {
         background-color: #f39c12;
-    }
-
-    .health-box {
-        background-color: #e74c3c;
     }
 </style>

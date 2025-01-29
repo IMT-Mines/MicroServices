@@ -1,6 +1,8 @@
 <script lang="ts">
     import type { Hero } from "../../models/hero.model";
 
+    const API_HERO = 'http://localhost:8080/api/heroes';
+
     let newHero: Partial<Hero> = {
         name: "",
         level: 1,
@@ -26,7 +28,7 @@
             inventory: newHero.inventory || []
         };
 
-        await fetch('http://localhost:8080/api/heroes', {
+        await fetch(API_HERO, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(createdHero)
@@ -95,5 +97,6 @@
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 4px;
+        background-color: #ebe9c3;
     }
 </style>

@@ -7,6 +7,6 @@ export interface Hero {
     health: number;
     damage: number;
     inventory: string[];
-    dungeonId: number;
-    roomId: number;
+    dungeonId?: number;
+    roomId?: number;
 }

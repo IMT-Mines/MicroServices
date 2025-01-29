@@ -3,6 +3,8 @@
     import {onMount} from "svelte";
     import type {Hero} from "../../models/hero.model";
 
+    const API_HEROES = 'http://localhost:8080/api/heroes';
+
     let heroes: Hero[] = $state([]);
 
     onMount(async () => {
@@ -10,7 +12,7 @@
     });
 
     async function getHeroes() {
-        const response = await fetch('http://localhost:8080/api/heroes');
+        const response = await fetch(API_HEROES);
         if (!response.ok) return [];
         return await response.json() as Hero[];
     }
