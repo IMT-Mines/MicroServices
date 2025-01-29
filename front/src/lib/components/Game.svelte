@@ -5,9 +5,8 @@
     import type { Dungeon } from "../models/dungeon.model.js";
     import Fight from "./Fight.svelte";
     import type { Hero } from "../models/hero.model";
-
-    const API_HERO = "http://localhost:8080/api/heroes";
-    const API_DUNGEONS = "http://localhost:8082/api/dungeons";
+    import {setPosition} from "../utils/heroes-utils";
+    import {getDungeons} from "../utils/dungeons-utils";
 
     async function startGame() {
         const hero = $gameState.hero;
@@ -30,7 +29,7 @@
             hero.roomId = dungeon.rooms[0]?.id;
             hero.dungeonId = dungeon.id;
 
-            const isUpdated = await setHeroDungeon(hero);
+            const isUpdated = await setPosition(hero.id!, hero.roomId, hero.dungeonId);
             if (!isUpdated) {
                 console.error("Échec de la mise à jour du donjon du héros.");
                 return;
@@ -39,21 +38,6 @@
             gameState.update(state => ({ ...state, dungeon, hero }));
         } catch (error) {
             console.error("Erreur lors du démarrage du jeu :", error);
-        }
-    }
-
-    async function setHeroDungeon(hero: Hero) {
-        try {
-            const response = await fetch(`${API_HERO}/${hero.id}/position`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ dungeonId: hero.dungeonId, roomId: hero.roomId }),
-            });
-
-            return response.ok;
-        } catch (error) {
-            console.error("Erreur lors de la mise à jour du héros :", error);
-            return false;
         }
     }
 
@@ -72,19 +56,7 @@
         return dungeons[randomIndex];
     }
 
-    async function getDungeons() {
-        try {
-            const response = await fetch(API_DUNGEONS);
-            if (!response.ok) {
-                console.error("Erreur lors de la récupération des donjons :", response.statusText);
-                return null;
-            }
-            return await response.json() as Dungeon[];
-        } catch (error) {
-            console.error("Erreur lors de la récupération des donjons :", error);
-            return null;
-        }
-    }
+
 </script>
 
 <TopBar></TopBar>

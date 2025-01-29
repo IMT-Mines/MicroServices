@@ -4,16 +4,14 @@
     import {gameState} from "../../stores/game-state.store";
     import type {Hero} from "../models/hero.model";
     import type {Monster} from "../models/monster.model";
-    import type {FightResult} from "../models/fight-result.model";
     import LifeBox from "./LifeBox.svelte";
+    import {attackMonster, deleteMonster, getMonster} from "../utils/monsters-utils";
+    import {createMonsterFight} from "../utils/dungeons-utils";
+    import {setHealth, setPosition} from "../utils/heroes-utils";
 
     let currentDungeon: Dungeon | null = $state(null);
     let currentHero: Hero | null = $state(null);
     let monster: Monster | null = $state(null);
-
-    const API_MONSTERS = 'http://localhost:8081/api/monsters';
-    const API_DUNGEONS = 'http://localhost:8082/api/dungeons';
-    const API_HEROES = 'http://localhost:8080/api/heroes';
 
     onMount(async () => {
         gameState.subscribe(state => {
@@ -21,18 +19,14 @@
             currentHero = state.hero;
             monster = state.monster;
         });
+        if (!currentDungeon || !currentHero) return null;
 
-        await createMonsterFight();
+        const response = await createMonsterFight(currentHero.dungeonId!, currentHero.roomId!, currentHero!.id!);
+        monster = await getMonster(currentHero!.id!);
+        if (!response || !monster) return;
 
-        monster = await getMonster();
         gameState.update(state => ({...state, monster}));
     });
-
-    async function createMonsterFight() {
-        const response = await fetch(`${API_DUNGEONS}/${currentDungeon?.id}/rooms/${currentHero?.roomId}?heroId=${currentHero?.id}`);
-        const monster = await response.json();
-        console.log(monster);
-    }
 
     function getRoom() {
         if (!currentDungeon || !currentHero) return null;
@@ -44,20 +38,14 @@
         if (!currentHero || !monster) return;
 
         const damage = Math.floor(Math.random() * (currentHero?.damage / 2) + currentHero?.damage);
-        const response = await fetch(`${API_MONSTERS}/attack`,
-            {
-                method: 'PUT',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({heroId: currentHero?.id, damage: isHealth ? 0 : damage})
-            }
-        );
-        if (!response.ok) return;
-        const fightResult = await response.json() as FightResult;
+
+        const fightResult = await attackMonster(currentHero.id!, damage, isHealth);
+        if (!fightResult) return;
 
         currentHero.health -= fightResult.damage;
         monster.health = fightResult.health;
 
-        await setHealth(currentHero.health);
+        await setHealth(currentHero.id!, currentHero.health);
 
     }
 
@@ -72,48 +60,10 @@
         const randomHealthBonus = Math.floor(Math.random() * 10);
         const mappedHealthBonus = currentHero.health + randomHealthBonus > currentHero.maxHealth ? 0 : randomHealthBonus;
 
-        await setHealth(currentHero.health + mappedHealthBonus);
+        await setHealth(currentHero.id!, currentHero.health + mappedHealthBonus);
 
         await attack(true);
         checkLife();
-    }
-
-    async function setHealth(health: number) {
-        if (!currentHero) return;
-
-        const response = await fetch(`${API_HEROES}/${currentHero.id}/health`,
-            {
-                method: 'PUT',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({health})
-            }
-        );
-
-        if (!response.ok) return;
-
-        currentHero.health = health;
-    }
-
-    async function setPosition(dungeonId: number | undefined, roomId: number | undefined) {
-        if (!currentHero) return;
-
-        const response = await fetch(`${API_HEROES}/${currentHero.id}/position`,
-            {
-                method: 'PUT',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({dungeonId, roomId})
-            }
-        );
-
-        if (!response.ok) return;
-
-        gameState.update(state => ({...state, dungeon: null}));
-    }
-
-    async function getMonster() {
-        const response = await fetch(`${API_MONSTERS}/${getRoom()?.monsterId}`);
-        if (!response.ok) return null;
-        return await response.json() as Monster;
     }
 
     function checkLife() {
@@ -121,8 +71,9 @@
 
         if (currentHero.health <= 0) {
             alert("Vous avez perdu !");
-            setHealth(currentHero.maxHealth);
-            setPosition(undefined, undefined);
+            setHealth(currentHero.id!, currentHero.maxHealth);
+            setPosition(currentHero.id!, undefined, undefined);
+            deleteMonster(currentHero.id!);
         }
     }
 

@@ -2,7 +2,7 @@
     import {gameState} from "../../stores/game-state.store";
     import type {Hero} from "../models/hero.model";
     import {onMount} from "svelte";
-    import {faDollarSign, faHeart, faStar} from "@fortawesome/free-solid-svg-icons";
+    import {faDollarSign, faStar} from "@fortawesome/free-solid-svg-icons";
     import Fa from "svelte-fa";
 
     let currentHero: Hero | null;
