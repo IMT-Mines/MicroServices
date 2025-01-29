@@ -1,0 +1,218 @@
+openapi: '3.0.3'
+info:
+  title: Heroes API
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /heroes:
+    get:
+      summary: Get all heroes
+      description: 'Gets all heroes.'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hero'
+    post:
+      summary: Create a new hero
+      description: 'Creates a new hero.'
+      responses:
+        '201':
+          description: Created
+  /heroes/{id}:
+    get:
+      summary: Get a hero
+      description: 'Gets hero by its id.'
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hero
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Hero'
+        '404':
+          description: Not found
+  /heroes/{id}/gold:
+    put:
+      summary: Update hero's gold
+      description: 'Updates hero''s gold by its id.'
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hero
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Hero's gold
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inventory:
+                  $ref: '#/components/schemas/Gold'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /heroes/{id}/health:
+    put:
+      summary: Update hero's health
+      description: 'Updates hero''s health by its id.'
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hero
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Hero's health
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                health:
+                  $ref: '#/components/schemas/Health'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /heroes/{id}/inventory:
+    put:
+      summary: Update hero's inventory
+      description: 'Updates hero''s inventory by its id.'
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hero
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Hero's inventory
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inventory:
+                  $ref: '#/components/schemas/Inventory'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+  /heroes/{id}/position:
+    put:
+      summary: Save hero progress
+      description: 'Saves hero progress by its id.'
+      parameters:
+        - name: id
+          in: path
+          description: ID of the hero
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Hero dungeon and room
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  $ref: '#/components/schemas/Position'
+      responses:
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+        '404':
+          description: Not found
+components:
+  schemas:
+    Hero:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'Hero'
+        level:
+          type: integer
+          example: 5
+        gold:
+          type: integer
+          example: 1000
+        maxHealth:
+          type: integer
+          example: 100
+        health:
+          type: integer
+          example: 80
+        damage:
+          type: integer
+          example: 20
+        dungeonId:
+          type: integer
+          example: 2
+        roomId:
+          type: integer
+          example: 3
+        inventory:
+          $ref: '#/components/schemas/Inventory'
+    Inventory:
+      type: array
+      items:
+        type: string
+        example: 'Sword'
+    Gold:
+      type: object
+      properties:
+        gold:
+          type: integer
+          example: 1000
+    Health:
+      type: object
+      properties:
+        health:
+          type: integer
+          example: 80
+    Position:
+      type: object
+      properties:
+        dungeonId:
+          type: integer
+          example: 2
+        roomId:
+          type: integer
+          example: 3

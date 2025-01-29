@@ -1,0 +1,101 @@
+openapi: '3.0.3'
+info:
+  title: Monsters API
+  version: '1.0.0'
+servers:
+  - url: http://localhost:8081/api
+paths:
+  /monsters/{id}:
+    get:
+      summary: Get a monster
+      description: 'Gets monster by its id.'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonsterInstance'
+  /create:
+    post:
+      summary: Create a new monster instance
+      description: 'Creates a new monster instance.'
+      requestBody:
+        description: Monster data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonsterInstance'
+      responses:
+        '201':
+          description: Created
+        '204':
+          description: No content
+  /attack:
+    put:
+      summary: Attack a monster
+      description: 'Attacks a monster using its id and damage quantity.'
+      requestBody:
+        description: Hero id and damage
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonsterDamage'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonsterDamage'
+        '404':
+          description: Not found
+components:
+  schemas:
+    MonsterInstance:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Monstre 1"
+        maxHealth:
+          type: integer
+          example: 100
+        health:
+          type: integer
+          example: 80
+        gold:
+          type: integer
+          example: 10
+        itemDrop:
+          type: string
+          example: "Sword"
+        damage:
+          type: integer
+          example: 10
+        heroId:
+          type: integer
+          example: 2
+        roomId:
+          type: integer
+          example: 3
+        dungeonId:
+          type: integer
+          example: 4
+        image:
+          type: string
+          example: "/monster1.png"
+    MonsterDamage:
+      type: object
+      properties:
+        heroId:
+          type: integer
+          example: 1
+        damage:
+          type: integer
+          example: 10
