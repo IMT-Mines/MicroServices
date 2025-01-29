@@ -49,7 +49,7 @@ public class MonstersService {
         final MonsterInstance monsterInstance = monstersInstanceRepository.findByHeroId(heroId)
                 .orElseThrow(() -> new MonsterNotFoundException("No monster found for heroId " + heroId));
 
-        monsterInstance.setHealth(Math.min(0, monsterInstance.getHealth() - damage));
+        monsterInstance.setHealth(Math.max(0, monsterInstance.getHealth() - damage));
 
         MonsterDamageResponseDto response;
 
