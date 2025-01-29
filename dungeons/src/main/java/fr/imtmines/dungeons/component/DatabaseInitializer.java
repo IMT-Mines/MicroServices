@@ -17,7 +17,6 @@ public class DatabaseInitializer {
 
     private static final int DUNGEONS = 5;
     private static final int ROOMS = 5;
-    private static final int MONSTERS = 6;
 
     public DatabaseInitializer(DungeonRepository dungeonRepository) {
         this.dungeonRepository = dungeonRepository;
@@ -36,7 +35,7 @@ public class DatabaseInitializer {
             for (long j = 0; j < ROOMS; j++) {
                 Room room = new Room();
                 room.setName("Salle " + j);
-                room.setMonsterId((long) random.nextInt(MONSTERS));
+                room.setMonsterId((long) random.nextInt(3) + (j == ROOMS - 1 ? 4 : 1));
                 room.setDungeon(dungeon);
                 rooms.add(room);
             }
