@@ -3,7 +3,6 @@ package fr.imtmines.monsters.services;
 import fr.imtmines.monsters.entity.Monster;
 import fr.imtmines.monsters.repository.MonstersRepository;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 
 @Service

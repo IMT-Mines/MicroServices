@@ -1,10 +1,9 @@
 package fr.imtmines.monsters.controller;
 
+import fr.imtmines.monsters.entity.Monster;
 import fr.imtmines.monsters.entity.MonsterInstance;
-import fr.imtmines.monsters.repository.MonstersRepository;
 import fr.imtmines.monsters.services.MonstersInstanceService;
 import fr.imtmines.monsters.services.MonstersService;
-import fr.imtmines.monsters.entity.Monster;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -13,26 +13,21 @@ import java.util.Optional;
 public class DungeonService {
     private final DungeonRepository dungeonRepository;
     private final RoomRepository roomRepository;
-    private final LogService logService;
 
-    public DungeonService(DungeonRepository dungeonRepository, RoomRepository roomRepository, LogService logService) {
+    public DungeonService(DungeonRepository dungeonRepository, RoomRepository roomRepository) {
         this.dungeonRepository = dungeonRepository;
         this.roomRepository = roomRepository;
-        this.logService = logService;
     }
 
     public List<Dungeon> getAllDungeons() {
-        logService.log("Getting all dungeons");
         return dungeonRepository.findAll();
     }
 
     public Optional<Dungeon> getDungeonById(Long id) {
-        logService.log("Getting dungeon by id " + id);
         return dungeonRepository.findById(id);
     }
 
     public Optional<Room> getRoomById(Long dungeonId, Long roomId) {
-        logService.log("Getting room by id " + roomId + " in dungeon " + dungeonId);
         return Optional.ofNullable(roomRepository.findRoomByIdAndDungeonId(roomId, dungeonId));
     }
 }

@@ -3,6 +3,7 @@ package fr.imtmines.heroes.controller;
 import fr.imtmines.heroes.entity.Hero;
 import fr.imtmines.heroes.excepetion.HeroNotFoundException;
 import fr.imtmines.heroes.service.HeroService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +30,14 @@ public class HeroController {
     public ResponseEntity<String> addHero(@RequestBody Hero hero) {
         hero.setId(null);
         heroService.createHero(hero);
-        return ResponseEntity.ok().body("Hero created");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Hero created");
     }
 
     @GetMapping("/hero/{id}")
     public ResponseEntity<Hero> getHero(@PathVariable String id) {
-        final Hero hero = heroService.getHero(Long.parseLong(id))
+        return heroService.getHero(Long.parseLong(id))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
-        return ResponseEntity.ok(hero);
     }
 
     @PutMapping("/hero/{id}/gold")
@@ -47,7 +48,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroGold(hero, newGold);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/hero/{id}/health")
@@ -58,7 +59,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroHealth(hero, newHealth);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/hero/{id}/inventory")
@@ -69,7 +70,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroInventory(hero, newInventory);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PutMapping("/hero/{id}/position")
@@ -81,7 +82,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroPosition(hero, newDungeonId, newRoomId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }
