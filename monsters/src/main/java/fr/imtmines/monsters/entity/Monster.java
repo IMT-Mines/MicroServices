@@ -1,5 +1,6 @@
 package fr.imtmines.monsters.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,11 +10,23 @@ public class Monster {
     @Id
     @GeneratedValue(generator = "increment")
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private int maxHealth;
+
+    @Column(nullable = false)
     private int gold;
+
+    @Column(nullable = false)
     private String itemDrop;
+
+    @Column(nullable = false)
     private int damage;
+
+    @Column(nullable = false)
     private String image;
 
     public void setImage(String image) {

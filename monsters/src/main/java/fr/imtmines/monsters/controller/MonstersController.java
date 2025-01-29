@@ -1,10 +1,10 @@
 package fr.imtmines.monsters.controller;
 
 import fr.imtmines.monsters.dto.MonsterDto;
-import fr.imtmines.monsters.entity.Monster;
 import fr.imtmines.monsters.entity.MonsterDamageResponseDto;
 import fr.imtmines.monsters.entity.MonsterInstance;
 import fr.imtmines.monsters.exception.MissingParameterException;
+import fr.imtmines.monsters.exception.MonsterNotFoundException;
 import fr.imtmines.monsters.services.MonstersInstanceService;
 import fr.imtmines.monsters.services.MonstersService;
 import org.springframework.http.HttpStatus;
@@ -25,20 +25,27 @@ public class MonstersController {
         this.monstersInstanceService = monstersInstanceService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Monster> getMonsterById(@PathVariable Long id) {
-        return ResponseEntity.ok(monstersService.getMonsterById(id));
+    @GetMapping("/heroes/{heroId}")
+    public ResponseEntity<MonsterInstance> getMonsterById(@PathVariable Long heroId) {
+        return monstersInstanceService.getMonsterInstanceById(heroId)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new MonsterNotFoundException("No monster found for heroId " + heroId));
     }
 
     @PostMapping("/create")
     public ResponseEntity<MonsterInstance> createMonsterInstance(@RequestBody MonsterDto monsterDto) {
-        if (monstersInstanceService.existsByHeroIdAndRoomIdAndDungeonId(
-                monsterDto.heroId(), monsterDto.roomId(), monsterDto.dungeonId())) {
+        if (monstersInstanceService.existsById(monsterDto.heroId(), monsterDto.roomId(), monsterDto.dungeonId())) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
         final MonsterInstance createdMonster = monstersService.createMonsterInstance(monsterDto);
         return new ResponseEntity<>(createdMonster, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/heroes/{heroId}")
+    public ResponseEntity<Void> deleteMonsterInstance(@PathVariable Long heroId) {
+        monstersInstanceService.deleteMonsterInstance(heroId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/attack")

@@ -28,6 +28,10 @@ public class MonstersService {
         return monstersRepository.findById(id).orElseThrow(() -> new MonsterNotFoundException("No monster found with id " + id));
     }
 
+    public Monster getMonsterByName(String name) {
+        return monstersRepository.findByName(name).orElseThrow(() -> new MonsterNotFoundException("No monster found with name " + name));
+    }
+
     public MonsterInstance createMonsterInstance(MonsterDto monsterDto) {
 
         final Monster monsterTemplate = getMonsterById(monsterDto.monsterId());
@@ -41,6 +45,8 @@ public class MonstersService {
         monsterInstance.setName(monsterTemplate.getName());
         monsterInstance.setImage(monsterTemplate.getImage());
         monsterInstance.setHeroId(monsterDto.heroId());
+        monsterInstance.setDungeonId(monsterDto.dungeonId());
+        monsterInstance.setRoomId(monsterDto.roomId());
 
         return monstersInstanceRepository.save(monsterInstance);
     }

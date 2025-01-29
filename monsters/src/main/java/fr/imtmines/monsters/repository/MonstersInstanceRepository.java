@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface MonstersInstanceRepository extends JpaRepository<MonsterInstance, Long> {
     Optional<MonsterInstance> findByHeroId(Long heroId);
 
-    boolean existsByHeroIdAndRoomIdAndDungeonId(Long heroId, long roomId, long dungeonId);
+    boolean existsByHeroIdAndRoomIdAndDungeonId(long heroId, long roomId, long dungeonId);
 
+    void deleteMonsterInstanceByHeroId(long heroId);
 }

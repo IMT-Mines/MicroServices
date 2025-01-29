@@ -1,25 +1,43 @@
 package fr.imtmines.monsters.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-    public class MonsterInstance {
-        @Id
-        @GeneratedValue(generator = "increment")
-        private Long id;
-        private String name;
-        private int maxHealth;
-        private int gold;
-        private String itemDrop;
-        private int damage;
+public class MonsterInstance {
+    @Id
+    @GeneratedValue(generator = "increment")
+    private Long id;
 
-        private int health;
-        private Long heroId;
-        private int roomId;
-        private int dungeonId;
-        private String image;
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private int maxHealth;
+
+    @Column(nullable = false)
+    private int gold;
+
+    @Column(nullable = false)
+    private String itemDrop;
+    private int damage;
+
+    @Column(nullable = false)
+    private int health;
+
+    @Column(nullable = false)
+    private Long heroId;
+
+    @Column(nullable = false)
+    private Long roomId;
+
+    @Column(nullable = false)
+    private Long dungeonId;
+
+    @Column(nullable = false)
+    private String image;
 
     public void setImage(String image) {
         this.image = image;
@@ -93,19 +111,19 @@ import jakarta.persistence.Id;
         return heroId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Long roomId) {
         this.roomId = roomId;
     }
 
-    public int getRoomId() {
+    public Long getRoomId() {
         return roomId;
     }
 
-    public void setDungeonId(int dungeonId) {
+    public void setDungeonId(Long dungeonId) {
         this.dungeonId = dungeonId;
     }
 
-    public int getDungeonId() {
+    public Long getDungeonId() {
         return dungeonId;
     }
 
