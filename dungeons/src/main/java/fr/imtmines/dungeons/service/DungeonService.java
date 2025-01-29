@@ -28,6 +28,6 @@ public class DungeonService {
     }
 
     public Optional<Room> getRoomById(Long dungeonId, Long roomId) {
-        return Optional.ofNullable(roomRepository.findRoomByIdAndDungeonId(roomId, dungeonId));
+        return roomRepository.findRoomByIdAndDungeonId(roomId, dungeonId);
     }
 }

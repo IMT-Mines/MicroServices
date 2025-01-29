@@ -6,10 +6,10 @@ import fr.imtmines.monsters.repository.MonstersInstanceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MonstersInstanceService {
-
 
     private final MonstersInstanceRepository monstersInstanceRepository;
 
@@ -25,16 +25,16 @@ public class MonstersInstanceService {
         return monstersInstanceRepository.findAll();
     }
 
-    public MonsterInstance getMonstersInstanceById(Long id) {
-        return monstersInstanceRepository.findById(id).orElse(null);
+    public Optional<MonsterInstance> getMonstersInstanceById(Long id) {
+        return monstersInstanceRepository.findById(id);
     }
 
     public MonsterInstance saveMonsterInstance(MonsterInstance monsterInstance) {
         return monstersInstanceRepository.save(monsterInstance);
     }
 
-    public MonsterInstance getMonsterInstanceByUserId(Long heroId) {
-        return (MonsterInstance) monstersInstanceRepository.findByHeroId(heroId).orElse(null);
+    public Optional<MonsterInstance> getMonsterInstanceByUserId(Long heroId) {
+        return monstersInstanceRepository.findByHeroId(heroId);
     }
 
 }

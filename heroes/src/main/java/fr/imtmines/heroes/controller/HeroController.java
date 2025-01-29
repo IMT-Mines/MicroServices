@@ -1,7 +1,8 @@
 package fr.imtmines.heroes.controller;
 
 import fr.imtmines.heroes.entity.Hero;
-import fr.imtmines.heroes.excepetion.HeroNotFoundException;
+import fr.imtmines.heroes.exception.HeroNotFoundException;
+import fr.imtmines.heroes.exception.MissingParameterException;
 import fr.imtmines.heroes.service.HeroService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,6 @@ public class HeroController {
 
     @PostMapping("/")
     public ResponseEntity<String> addHero(@RequestBody Hero hero) {
-        hero.setId(null);
         heroService.createHero(hero);
         return ResponseEntity.status(HttpStatus.CREATED).body("Hero created");
     }
@@ -44,7 +44,7 @@ public class HeroController {
     public ResponseEntity<String> updateHeroGold(@PathVariable String id, @RequestBody Map<String, Integer> body) {
         final Integer newGold = body.get("gold");
         if (newGold == null)
-            return ResponseEntity.badRequest().body("Request body must contain a 'gold' field");
+            throw new MissingParameterException("gold");
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroGold(hero, newGold);
@@ -55,7 +55,7 @@ public class HeroController {
     public ResponseEntity<String> updateHeroHealth(@PathVariable String id, @RequestBody Map<String, Integer> body) {
         final Integer newHealth = body.get("health");
         if (newHealth == null)
-            return ResponseEntity.badRequest().body("Request body must contain a 'health' field");
+            throw new MissingParameterException("health");
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroHealth(hero, newHealth);
@@ -66,7 +66,7 @@ public class HeroController {
     public ResponseEntity<String> updateHeroInventory(@PathVariable String id, @RequestBody Map<String, List<String>> body) {
         final List<String> newInventory = body.get("inventory");
         if (newInventory == null)
-            return ResponseEntity.badRequest().body("Request body must contain a 'inventory' field");
+            throw new MissingParameterException("inventory");
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroInventory(hero, newInventory);
@@ -78,7 +78,7 @@ public class HeroController {
         final Long newDungeonId = body.get("dungeonId");
         final Long newRoomId = body.get("roomId");
         if (newDungeonId == null || newRoomId == null)
-            return ResponseEntity.badRequest().body("Request body must contain both 'dungeonId' and 'roomId' fields");
+            throw new MissingParameterException("dungeonId", "roomId");
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroPosition(hero, newDungeonId, newRoomId);

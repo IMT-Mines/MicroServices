@@ -15,9 +15,9 @@ import java.util.Random;
 public class DatabaseInitializer {
     private final DungeonRepository dungeonRepository;
 
-    private final int DUNGEONS = 5;
-    private final int ROOMS = 5;
-    private final int MONSTERS = 6;
+    private static final int DUNGEONS = 5;
+    private static final int ROOMS = 5;
+    private static final int MONSTERS = 6;
 
     public DatabaseInitializer(DungeonRepository dungeonRepository) {
         this.dungeonRepository = dungeonRepository;

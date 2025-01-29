@@ -1,17 +1,16 @@
 package fr.imtmines.monsters.controller;
 
 import fr.imtmines.monsters.entity.Monster;
+import fr.imtmines.monsters.entity.MonsterDamageResponseDto;
 import fr.imtmines.monsters.entity.MonsterInstance;
-import fr.imtmines.monsters.services.MonstersInstanceService;
+import fr.imtmines.monsters.exception.MissingParameterException;
 import fr.imtmines.monsters.services.MonstersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -19,81 +18,35 @@ import java.util.Random;
 public class MonstersController {
 
     private final MonstersService monstersService;
-    private final MonstersInstanceService monstersInstanceService;
 
-    public MonstersController(MonstersService monstersService, MonstersInstanceService monstersInstanceService) {
+    public MonstersController(MonstersService monstersService) {
         this.monstersService = monstersService;
-        this.monstersInstanceService = monstersInstanceService;
     }
 
     @GetMapping
     public List<MonsterInstance> getMonstersInstance() {
-        return monstersInstanceService.getMonstersInstance();
+        return monstersService.getAllMonstersInstances();
     }
 
     @GetMapping("/{id}")
-    public Monster getMonsterById(@PathVariable Long id) {
-//        return monstersInstanceService.getMonstersInstanceById(id);
-        return monstersService.getMonstersById(id);
+    public ResponseEntity<Monster> getMonsterById(@PathVariable Long id) {
+        return ResponseEntity.ok(monstersService.getMonsterById(id));
     }
 
     @PostMapping("/dungeon")
     public ResponseEntity<MonsterInstance> createMonsterInstance(@RequestBody MonsterInstance monsterInstance) {
-
-        Monster monsterTemplate = monstersService.getMonstersById(monsterInstance.getId());
-
-        monsterInstance.setId(null);
-        monsterInstance.setMaxHealth(monsterTemplate.getMaxHealth());
-        monsterInstance.setGold(monsterTemplate.getGold());
-        monsterInstance.setItemDrop(monsterTemplate.getItemDrop());
-        monsterInstance.setDamage(monsterTemplate.getDamage());
-        monsterInstance.setHealth(monsterTemplate.getMaxHealth());
-        monsterInstance.setName(monsterTemplate.getName());
-        monsterInstance.setImage(monsterTemplate.getImage());
-
-        MonsterInstance createdMonsterInstance = monstersInstanceService.saveMonsterInstance(monsterInstance);
-        return new ResponseEntity<>(createdMonsterInstance, HttpStatus.CREATED);
-
+        MonsterInstance createdMonster = monstersService.createMonsterInstance(monsterInstance);
+        return new ResponseEntity<>(createdMonster, HttpStatus.CREATED);
     }
 
     @PutMapping("/attack")
-    public ResponseEntity<Map<String, Integer>> attackMonster(@RequestBody Map<String, Long> requestBody) {
+    public ResponseEntity<MonsterDamageResponseDto> attackMonster(@RequestBody Map<String, Long> requestBody) {
+        Long heroId = requestBody.get("heroId");
+        Long damage = requestBody.get("damage");
 
-        Long userId = requestBody.get("heroId");
-        MonsterInstance monsterInstance = monstersInstanceService.getMonsterInstanceByUserId(userId);
+        if (heroId == null || damage == null)
+            throw new MissingParameterException("heroId", "damage");
 
-        if (monsterInstance == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        monsterInstance.setHealth(monsterInstance.getHealth() - 5);
-
-        if (monsterInstance.getHealth() <= 0) {
-
-            int health = monsterInstance.getHealth();
-            int damage = monsterInstance.getDamage();
-
-            Random random = new Random();
-            Integer randomDamage = damage / 2 + random.nextInt(damage / 2 + 1);
-
-            monstersInstanceService.deleteMonsterInstance(monsterInstance.getId());
-
-            Map<String, Integer> response = new HashMap<>();
-            response.put("health", health);
-            response.put("damage", randomDamage);
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-
-        MonsterInstance updatedMonsterInstance = monstersInstanceService.saveMonsterInstance(monsterInstance);
-
-        Map<String, Integer> response = new HashMap<>();
-        response.put("health", updatedMonsterInstance.getHealth());
-        response.put("damage", updatedMonsterInstance.getDamage());
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(monstersService.attackMonster(heroId, damage.intValue()));
     }
-
-
 }
-

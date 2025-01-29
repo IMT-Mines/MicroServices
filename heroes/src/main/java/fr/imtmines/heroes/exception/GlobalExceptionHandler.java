@@ -1,4 +1,4 @@
-package fr.imtmines.heroes.excepetion;
+package fr.imtmines.heroes.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,4 +12,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleHeroNotFound(HeroNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(MissingParameterException.class)
+    public ResponseEntity<String> handleMissingParameter(MissingParameterException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 }

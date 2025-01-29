@@ -3,7 +3,7 @@ package fr.imtmines.dungeons.controller;
 import fr.imtmines.dungeons.dto.MonsterDto;
 import fr.imtmines.dungeons.entity.Dungeon;
 import fr.imtmines.dungeons.entity.Room;
-import fr.imtmines.dungeons.excepetion.DungeonNotFoundException;
+import fr.imtmines.dungeons.exception.DungeonNotFoundException;
 import fr.imtmines.dungeons.service.CreateMonsterService;
 import fr.imtmines.dungeons.service.DungeonService;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/dungeons")
 public class DungeonController {
     private final DungeonService dungeonService;
     private final CreateMonsterService createMonsterService;
@@ -23,19 +23,19 @@ public class DungeonController {
         this.createMonsterService = createMonsterService;
     }
 
-    @GetMapping("/dungeons")
+    @GetMapping("/")
     public List<Dungeon> getDungeons() {
         return dungeonService.getAllDungeons();
     }
 
-    @GetMapping("/dungeons/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Dungeon> getDungeonsById(@PathVariable Long id) {
         return dungeonService.getDungeonById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new DungeonNotFoundException("Dungeon not found with id " + id));
     }
 
-    @GetMapping("/dungeons/{dungeonId}/rooms/{roomId}")
+    @GetMapping("/{dungeonId}/rooms/{roomId}")
     public ResponseEntity<Room> getDungeonRoomById(@PathVariable Long dungeonId, @PathVariable Long roomId, @RequestParam Long heroId) {
         return dungeonService.getRoomById(dungeonId, roomId)
                 .map(room -> {
