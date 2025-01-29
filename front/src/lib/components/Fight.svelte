@@ -40,10 +40,6 @@
         return currentDungeon.rooms.find(room => room.id === currentHero!.roomId);
     }
 
-    function onAttack() {
-        attack();
-    }
-
     async function attack(isHealth = false) {
         if (!currentHero || !monster) return;
 
@@ -58,11 +54,16 @@
         if (!response.ok) return;
         const fightResult = await response.json() as FightResult;
 
+        currentHero.health -= fightResult.damage;
+        monster.health = fightResult.health;
 
+        await setHealth(currentHero.health);
 
-        // TODO UPDATE MONSTER HEALTH AND PLAYER IN DB
+    }
 
-
+    function onAttack() {
+        attack();
+        checkLife();
     }
 
     async function onHeal() {
@@ -71,24 +72,58 @@
         const randomHealthBonus = Math.floor(Math.random() * 10);
         const mappedHealthBonus = currentHero.health + randomHealthBonus > currentHero.maxHealth ? 0 : randomHealthBonus;
 
+        await setHealth(currentHero.health + mappedHealthBonus);
+
+        await attack(true);
+        checkLife();
+    }
+
+    async function setHealth(health: number) {
+        if (!currentHero) return;
+
         const response = await fetch(`${API_HEROES}/${currentHero.id}/health`,
             {
                 method: 'PUT',
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({health: currentHero.health + mappedHealthBonus})
+                body: JSON.stringify({health})
             }
         );
-        currentHero.health += mappedHealthBonus;
 
         if (!response.ok) return;
 
-        await attack(true);
+        currentHero.health = health;
+    }
+
+    async function setPosition(dungeonId: number | undefined, roomId: number | undefined) {
+        if (!currentHero) return;
+
+        const response = await fetch(`${API_HEROES}/${currentHero.id}/position`,
+            {
+                method: 'PUT',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({dungeonId, roomId})
+            }
+        );
+
+        if (!response.ok) return;
+
+        gameState.update(state => ({...state, dungeon: null}));
     }
 
     async function getMonster() {
         const response = await fetch(`${API_MONSTERS}/${getRoom()?.monsterId}`);
         if (!response.ok) return null;
         return await response.json() as Monster;
+    }
+
+    function checkLife() {
+        if (!currentHero || !monster) return;
+
+        if (currentHero.health <= 0) {
+            alert("Vous avez perdu !");
+            setHealth(currentHero.maxHealth);
+            setPosition(undefined, undefined);
+        }
     }
 
 </script>
@@ -103,18 +138,20 @@
         </div>
         <div class="player">
             <img class="back player-back" src="src/assets/back2.png" alt="back">
-            <img class="player-sprite" src="src/assets/hero.png" alt="hero">
-            <div class="player-lifebox">
+            <div class="lifebox-player">
                 <LifeBox life="{currentHero.health}" maxLife="{currentHero.maxHealth}" name="{currentHero.name}"
                          level="{currentHero.level}"></LifeBox>
             </div>
+            <img class="player-sprite" src="src/assets/hero.png" alt="hero">
         </div>
 
         <div class="monster">
             <img class="back monster-back" src="src/assets/back2.png" alt="back">
+            <div class="lifebox-monster">
+                <LifeBox life="{monster.health ?? monster.maxHealth }" maxLife="{monster.maxHealth}"
+                         name="{monster.name}"></LifeBox>
+            </div>
             <img class="monster-sprite" src={`src/assets/${monster.name}.png`} alt="monster">
-            <LifeBox life="{monster.health ?? monster.maxHealth }" maxLife="{monster.maxHealth}"
-                     name="{monster.name}"></LifeBox>
         </div>
 
         <div class="spell-box">
@@ -154,25 +191,41 @@
     }
 
     .player {
-        position: relative;
-        top: 70%;
-        left: 20%;
-    }
-
-    .player-lifebox {
         position: absolute;
-    }
-
-    .player-sprite {
-        position: absolute;
-        bottom: 0;
+        bottom: 10%;
         left: 10%;
     }
 
     .monster {
         position: absolute;
-        top: 40%;
+        top: 10%;
         right: 20%;
+    }
+
+
+    .player-back {
+        bottom: 0;
+    }
+
+    .lifebox-player {
+        transform: translateX(-25%);
+    }
+
+    .player-sprite {
+        transform: translateX(50%) translateY(-20%);
+    }
+
+    .monster-back {
+        bottom: 0;
+    }
+
+    .lifebox-monster {
+        transform: translateX(-25%);
+    }
+
+    .monster-sprite {
+        transform: translateX(70%) translateY(-20%);
+        width: 100%;
     }
 
     .spell-box {
@@ -204,12 +257,6 @@
         width: 500px;
         filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
     }
-
-    .player-back {
-        bottom: -80%;
-        transform: scale(1.5);
-    }
-
 
     .attack:hover {
         background-color: #f697a1;
