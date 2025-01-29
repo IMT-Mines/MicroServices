@@ -17,7 +17,7 @@ public class MonstersInstanceService {
         this.monstersInstanceRepository = monstersInstanceRepository;
     }
 
-    public boolean existsByHeroIdAndRoomIdAndDungeonId(long heroId, int roomId, int dungeonId) {
+    public boolean existsByHeroIdAndRoomIdAndDungeonId(long heroId, long roomId, long dungeonId) {
         return monstersInstanceRepository.existsByHeroIdAndRoomIdAndDungeonId(heroId, roomId, dungeonId);
     }
 }

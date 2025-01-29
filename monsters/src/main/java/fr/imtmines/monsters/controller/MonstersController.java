@@ -1,5 +1,6 @@
 package fr.imtmines.monsters.controller;
 
+import fr.imtmines.monsters.dto.MonsterDto;
 import fr.imtmines.monsters.entity.Monster;
 import fr.imtmines.monsters.entity.MonsterDamageResponseDto;
 import fr.imtmines.monsters.entity.MonsterInstance;
@@ -31,20 +32,20 @@ public class MonstersController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<MonsterInstance> createMonsterInstance(@RequestBody MonsterInstance monsterInstance) {
+    public ResponseEntity<MonsterInstance> createMonsterInstance(@RequestBody MonsterDto monsterDto) {
         if (monstersInstanceService.existsByHeroIdAndRoomIdAndDungeonId(
-                monsterInstance.getHeroId(), monsterInstance.getRoomId(), monsterInstance.getDungeonId())) {
+                monsterDto.heroId(), monsterDto.roomId(), monsterDto.dungeonId())) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        MonsterInstance createdMonster = monstersService.createMonsterInstance(monsterInstance);
+        final MonsterInstance createdMonster = monstersService.createMonsterInstance(monsterDto);
         return new ResponseEntity<>(createdMonster, HttpStatus.CREATED);
     }
 
     @PutMapping("/attack")
     public ResponseEntity<MonsterDamageResponseDto> attackMonster(@RequestBody Map<String, Long> requestBody) {
-        Long heroId = requestBody.get("heroId");
-        Long damage = requestBody.get("damage");
+        final Long heroId = requestBody.get("heroId");
+        final Long damage = requestBody.get("damage");
 
         if (heroId == null || damage == null)
             throw new MissingParameterException("heroId", "damage");

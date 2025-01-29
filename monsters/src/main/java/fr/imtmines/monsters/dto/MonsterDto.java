@@ -1,4 +1,4 @@
-package fr.imtmines.dungeons.dto;
+package fr.imtmines.monsters.dto;
 
 public record MonsterDto(
         long monsterId,

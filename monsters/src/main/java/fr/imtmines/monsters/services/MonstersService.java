@@ -1,5 +1,6 @@
 package fr.imtmines.monsters.services;
 
+import fr.imtmines.monsters.dto.MonsterDto;
 import fr.imtmines.monsters.entity.Monster;
 import fr.imtmines.monsters.entity.MonsterDamageResponseDto;
 import fr.imtmines.monsters.entity.MonsterInstance;
@@ -9,7 +10,6 @@ import fr.imtmines.monsters.repository.MonstersRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Random;
 
 @Service
@@ -24,18 +24,14 @@ public class MonstersService {
         this.monstersInstanceRepository = monstersInstanceRepository;
     }
 
-    public List<MonsterInstance> getAllMonstersInstances() {
-        return monstersInstanceRepository.findAll();
-    }
-
     public Monster getMonsterById(Long id) {
         return monstersRepository.findById(id).orElseThrow(() -> new MonsterNotFoundException("Monster not found with id " + id));
     }
 
-    public MonsterInstance createMonsterInstance(MonsterInstance monsterInstance) {
-        Monster monsterTemplate = getMonsterById(monsterInstance.getId());
+    public MonsterInstance createMonsterInstance(MonsterDto monsterDto) {
+        final Monster monsterTemplate = getMonsterById(monsterDto.monsterId());
 
-        monsterInstance.setId(null);
+        MonsterInstance monsterInstance = new MonsterInstance();
         monsterInstance.setMaxHealth(monsterTemplate.getMaxHealth());
         monsterInstance.setGold(monsterTemplate.getGold());
         monsterInstance.setItemDrop(monsterTemplate.getItemDrop());
@@ -48,20 +44,21 @@ public class MonstersService {
     }
 
     public MonsterDamageResponseDto attackMonster(long heroId, int damage) {
-        MonsterInstance monsterInstance = monstersInstanceRepository.findByHeroId(heroId)
+        final MonsterInstance monsterInstance = monstersInstanceRepository.findByHeroId(heroId)
                 .orElseThrow(() -> new MonsterNotFoundException("No monster found for heroId " + heroId));
 
         monsterInstance.setHealth(Math.min(0, monsterInstance.getHealth() - damage));
+
         MonsterDamageResponseDto response;
 
         if (monsterInstance.getHealth() <= 0) {
-            int monsterDamage = monsterInstance.getDamage();
-            int randomDamage = monsterDamage / 2 + new Random().nextInt(monsterDamage / 2 + 1);
+            final int monsterDamage = monsterInstance.getDamage();
+            final int randomDamage = monsterDamage / 2 + new Random().nextInt(monsterDamage / 2 + 1);
 
             monstersInstanceRepository.deleteById(monsterInstance.getId());
             response = new MonsterDamageResponseDto(0, randomDamage);
         } else {
-            MonsterInstance updatedMonster = monstersInstanceRepository.save(monsterInstance);
+            final MonsterInstance updatedMonster = monstersInstanceRepository.save(monsterInstance);
             response = new MonsterDamageResponseDto(updatedMonster.getHealth(), updatedMonster.getDamage());
         }
         return response;
