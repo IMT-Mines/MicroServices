@@ -22,12 +22,12 @@ public class HeroController {
         this.heroService = heroService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Hero> getHeroes() {
         return heroService.getHeroes();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<String> addHero(@RequestBody Hero hero) {
         heroService.createHero(hero);
         return ResponseEntity.status(HttpStatus.CREATED).body("Hero created");

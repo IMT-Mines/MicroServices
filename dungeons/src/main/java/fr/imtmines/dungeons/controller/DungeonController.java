@@ -23,7 +23,7 @@ public class DungeonController {
         this.createMonsterService = createMonsterService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<Dungeon> getDungeons() {
         return dungeonService.getAllDungeons();
     }
