@@ -19,7 +19,7 @@ public class CreateMonsterService {
 
     public void createMonster(MonsterDto monsterDto) {
         webClient.post()
-                .uri(monsterApiUrl + "api/monsters/dungeon")
+                .uri(monsterApiUrl + "api/monsters/create")
                 .bodyValue(monsterDto)
                 .retrieve()
                 .bodyToMono(String.class)

@@ -17,11 +17,11 @@ paths:
         '200':
           description: OK
           content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Dungeon'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dungeon'
   /dungeons/{id}:
     get:
       tags:
@@ -41,7 +41,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Dungeon'
+                $ref: '#/components/schemas/Dungeon'
         '404':
           description: Not found
   /dungeons/{dungeonId}/rooms/{roomId}:
@@ -92,7 +92,7 @@ components:
         rooms:
           type: array
           items:
-              $ref: '#/components/schemas/Room'
+            $ref: '#/components/schemas/Room'
     Room:
       type: object
       properties:

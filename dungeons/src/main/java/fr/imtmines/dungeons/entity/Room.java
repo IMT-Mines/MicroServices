@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Room")
+@Table(name = "Room")
 public class Room {
     @Id
     @GeneratedValue(generator = "increment")

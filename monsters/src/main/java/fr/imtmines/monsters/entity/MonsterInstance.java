@@ -5,29 +5,29 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
-public class MonsterInstance {
-    @Id
-    @GeneratedValue(generator = "increment")
-    private Long id;
-    private String name;
-    private int maxHealth;
-    private int gold;
-    private String itemDrop;
-    private int damage;
+    public class MonsterInstance {
+        @Id
+        @GeneratedValue(generator = "increment")
+        private Long id;
+        private String name;
+        private int maxHealth;
+        private int gold;
+        private String itemDrop;
+        private int damage;
 
-    private int health;
-    private Long heroId;
-    private int roomId;
-    private int dungeonId;
-    private String image;
+        private int health;
+        private Long heroId;
+        private int roomId;
+        private int dungeonId;
+        private String image;
 
     public void setImage(String image) {
         this.image = image;
     }
+
     public String getImage() {
         return image;
     }
-
 
     public void setId(Long id) {
         this.id = id;
@@ -69,7 +69,7 @@ public class MonsterInstance {
         return gold;
     }
 
-    public String getItemDrop () {
+    public String getItemDrop() {
         return itemDrop;
     }
 

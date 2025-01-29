@@ -56,7 +56,7 @@ public class Monster {
         return gold;
     }
 
-    public String getItemDrop () {
+    public String getItemDrop() {
         return itemDrop;
     }
 
