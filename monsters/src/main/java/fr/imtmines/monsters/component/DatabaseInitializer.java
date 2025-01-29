@@ -25,7 +25,7 @@ public class DatabaseInitializer {
         zombie.setGold(5);
         zombie.setItemDrop("peau de zombie");
         zombie.setMaxHealth(15);
-        zombie.setImage("/zombie.png");
+        zombie.setImage("zombie.png");
 
 
         Monster zombiere = new Monster();
