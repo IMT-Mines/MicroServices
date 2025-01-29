@@ -25,7 +25,7 @@ public class DatabaseInitializer {
         zombie.setGold(5);
         zombie.setItemDrop("peau de zombie");
         zombie.setMaxHealth(15);
-        zombie.setImage("lien/vers/zombie.png");
+        zombie.setImage("/zombie.png");
 
 
         Monster zombiere = new Monster();
@@ -34,7 +34,7 @@ public class DatabaseInitializer {
         zombiere.setGold(10);
         zombiere.setItemDrop("peau de zombiere");
         zombiere.setMaxHealth(30);
-        zombiere.setImage("lien/vers/zombiere.png");
+        zombiere.setImage("zombiere.png");
 
         Monster squelette = new Monster();
         squelette.setName("squelette");
@@ -42,7 +42,7 @@ public class DatabaseInitializer {
         squelette.setGold(6);
         squelette.setItemDrop("os de squelette");
         squelette.setMaxHealth(21);
-        squelette.setImage("lien/vers/squelette.png");
+        squelette.setImage("squelette.png");
 
         Monster squelethanol = new Monster();
         squelethanol.setName("squelethanol");
@@ -50,7 +50,7 @@ public class DatabaseInitializer {
         squelethanol.setGold(12);
         squelethanol.setItemDrop("os de squelethanol");
         squelethanol.setMaxHealth(42);
-        squelethanol.setImage("lien/vers/squelethanol.png");
+        squelethanol.setImage("squelethanol.png");
 
         Monster chauvesouris = new Monster();
         chauvesouris.setName("chauves-souris");
@@ -58,7 +58,7 @@ public class DatabaseInitializer {
         chauvesouris.setGold(7);
         chauvesouris.setItemDrop("aile de chauves-souris");
         chauvesouris.setMaxHealth(30);
-        chauvesouris.setImage("lien/vers/chauvesouris.png");
+        chauvesouris.setImage("chauvesouris.png");
 
         Monster chauvesouricard = new Monster();
         chauvesouricard.setName("chauves-souricard");
@@ -66,7 +66,7 @@ public class DatabaseInitializer {
         chauvesouricard.setGold(14);
         chauvesouricard.setItemDrop("aile de chauves-souricard");
         chauvesouricard.setMaxHealth(60);
-        chauvesouricard.setImage("lien/vers/chauvesouricard.png");
+        chauvesouricard.setImage("chauvesouricard.png");
 
         monstersRepository.save(zombie);
         monstersRepository.save(zombiere);

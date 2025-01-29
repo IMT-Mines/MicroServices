@@ -35,13 +35,13 @@ public class LoggingInterceptor extends GenericFilterBean {
     }
 
     private void logRequest(ContentCachingRequestWrapper request) {
-        String requestInfo = request.getMethod() + " " + request.getRequestURI() + new String(request.getContentAsByteArray());
+        String requestInfo = request.getMethod() + " " + request.getRequestURI() + " " + new String(request.getContentAsByteArray());
         logService.log(requestInfo);
     }
 
     private void logResponse(ContentCachingResponseWrapper response) throws IOException {
         String responseInfo = new String(response.getContentAsByteArray()) + "\n";
-        logService.log(responseInfo);
+        logService.log(response.getStatus() + " " + responseInfo);
         response.copyBodyToResponse();
     }
 

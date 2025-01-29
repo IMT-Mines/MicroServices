@@ -25,10 +25,11 @@ public class MonstersService {
     }
 
     public Monster getMonsterById(Long id) {
-        return monstersRepository.findById(id).orElseThrow(() -> new MonsterNotFoundException("Monster not found with id " + id));
+        return monstersRepository.findById(id).orElseThrow(() -> new MonsterNotFoundException("No monster found with id " + id));
     }
 
     public MonsterInstance createMonsterInstance(MonsterDto monsterDto) {
+
         final Monster monsterTemplate = getMonsterById(monsterDto.monsterId());
 
         MonsterInstance monsterInstance = new MonsterInstance();
@@ -39,6 +40,7 @@ public class MonstersService {
         monsterInstance.setHealth(monsterTemplate.getMaxHealth());
         monsterInstance.setName(monsterTemplate.getName());
         monsterInstance.setImage(monsterTemplate.getImage());
+        monsterInstance.setHeroId(monsterDto.heroId());
 
         return monstersInstanceRepository.save(monsterInstance);
     }
