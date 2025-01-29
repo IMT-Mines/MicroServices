@@ -48,7 +48,7 @@
         if (!currentHero || !monster) return;
 
         const damage = Math.floor(Math.random() * (currentHero?.damage / 2) + currentHero?.damage);
-        const response = await fetch(`${API_MONSTERS}/${getRoom()?.monsterId}/attack`,
+        const response = await fetch(`${API_MONSTERS}/attack`,
             {
                 method: 'PUT',
                 headers: {"Content-Type": "application/json"},
@@ -58,21 +58,31 @@
         if (!response.ok) return;
         const fightResult = await response.json() as FightResult;
 
+
+
         // TODO UPDATE MONSTER HEALTH AND PLAYER IN DB
+
 
     }
 
-    function onHeal() {
-        const response = fetch(`${API_HEROES}/${getRoom()?.monsterId}/heal`,
+    async function onHeal() {
+        if (!currentHero || !monster) return;
+
+        const randomHealthBonus = Math.floor(Math.random() * 10);
+        const mappedHealthBonus = currentHero.health + randomHealthBonus > currentHero.maxHealth ? 0 : randomHealthBonus;
+
+        const response = await fetch(`${API_HEROES}/${currentHero.id}/health`,
             {
                 method: 'PUT',
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({heroId: currentHero?.id})
+                body: JSON.stringify({health: currentHero.health + mappedHealthBonus})
             }
         );
+        currentHero.health += mappedHealthBonus;
 
-        attack(true);
+        if (!response.ok) return;
 
+        await attack(true);
     }
 
     async function getMonster() {
@@ -102,6 +112,7 @@
 
         <div class="monster">
             <img class="back monster-back" src="src/assets/back2.png" alt="back">
+            <img class="monster-sprite" src={`src/assets/${monster.name}.png`} alt="monster">
             <LifeBox life="{monster.health ?? monster.maxHealth }" maxLife="{monster.maxHealth}"
                      name="{monster.name}"></LifeBox>
         </div>

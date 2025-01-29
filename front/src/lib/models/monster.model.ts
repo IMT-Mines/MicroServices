@@ -5,4 +5,5 @@ export interface Monster {
     maxHealth: number;
     gold: number;
     itemDrop: string;
+    image: string;
 }

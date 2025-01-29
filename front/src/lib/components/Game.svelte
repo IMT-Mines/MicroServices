@@ -6,7 +6,7 @@
     import Fight from "./Fight.svelte";
     import type { Hero } from "../models/hero.model";
 
-    const API_HERO = "http://localhost:8080/api/hero";
+    const API_HERO = "http://localhost:8080/api/heroes";
     const API_DUNGEONS = "http://localhost:8082/api/dungeons";
 
     async function startGame() {
