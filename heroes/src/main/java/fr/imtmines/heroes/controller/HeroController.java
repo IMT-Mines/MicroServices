@@ -48,7 +48,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroGold(hero, newGold);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}/health")
@@ -59,7 +59,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroHealth(hero, newHealth);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}/inventory")
@@ -70,7 +70,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroInventory(hero, newInventory);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/{id}/position")
@@ -82,7 +82,7 @@ public class HeroController {
         final Hero hero = heroService.getHero(Long.parseLong(id))
                 .orElseThrow(() -> new HeroNotFoundException("Hero not found with id " + id));
         heroService.updateHeroPosition(hero, newDungeonId, newRoomId);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
