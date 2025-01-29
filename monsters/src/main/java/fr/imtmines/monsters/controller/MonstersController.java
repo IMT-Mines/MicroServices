@@ -30,8 +30,9 @@ public class MonstersController {
     }
 
     @GetMapping("/{id}")
-    public MonsterInstance getMonstersInstanceById(@PathVariable Long id) {
-        return monstersInstanceService.getMonstersInstanceById(id);
+    public Monster getMonsterById(@PathVariable Long id) {
+//        return monstersInstanceService.getMonstersInstanceById(id);
+        return monstersService.getMonstersById(id);
     }
 
     @PostMapping("/dungeon")
@@ -51,11 +52,6 @@ public class MonstersController {
         MonsterInstance createdMonsterInstance = monstersInstanceService.saveMonsterInstance(monsterInstance);
         return new ResponseEntity<>(createdMonsterInstance, HttpStatus.CREATED);
 
-    }
-
-    @GetMapping("/template/{id}")
-    public Monster getMonstersById(@PathVariable Long id) {
-        return monstersService.getMonstersById(id);
     }
 
     @PutMapping("/attack")
