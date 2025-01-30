@@ -39,4 +39,5 @@ cd dungeons && ./gradlew bootRun
 cd heroes && ./gradlew bootRun
 cd monsters && ./gradlew bootRun
 cd logs && ./gradlew bootRun
+cd front && npm run dev
 ```
